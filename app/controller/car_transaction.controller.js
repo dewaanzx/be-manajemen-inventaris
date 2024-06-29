@@ -136,7 +136,7 @@ const store = async (req, res) => {
       const notification = await Notification.query().insert({
         user_id: car_transaction.user_id,
         transaction_id: car_transaction.id,
-        notification: "Permintaan Peminjaman Mobil ke "+req.body.destination+" telah diterima!",
+        notification: "Permintaan Pengambilan Material "+req.body.destination+" telah diterima!",
         type: "car",
         status: "unread",
       });
@@ -144,7 +144,7 @@ const store = async (req, res) => {
       const notification = await Notification.query().insert({
         user_id: car_transaction.user_id,
         transaction_id: car_transaction.id,
-        notification: "Permintaan Peminjaman Mobil ke "+req.body.destination+" telah dibuat!",
+        notification: "Permintaan Pengambilan Material "+req.body.destination+" telah dibuat!",
         type: "car",
         status: "unread",
       });
@@ -376,7 +376,7 @@ const update = async (req, res) => {
       const notification = await Notification.query().insert({
         user_id: data_user.id,
         transaction_id: car_transaction_data.id,
-        notification: "Permintaan Peminjaman Mobil ke "+req.body.destination+" telah ditolak!",
+        notification: "Permintaan Pengambilan Material "+req.body.destination+" telah ditolak!",
         type: "car",
         status: "unread",
       });
@@ -401,7 +401,7 @@ const update = async (req, res) => {
       const notification = await Notification.query().insert({
         user_id: data_user.id,
         transaction_id: car_transaction_data.id,
-        notification: "Permintaan Peminjaman Mobil ke "+req.body.destination+" telah diterima!",
+        notification: "Permintaan Pengambilan Material "+req.body.destination+" telah diterima!",
         type: "car",
         status: "unread",
       });
