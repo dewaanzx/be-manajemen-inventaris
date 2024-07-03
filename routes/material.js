@@ -2,20 +2,20 @@ const express = require("express");
 
 const router = express.Router();
 
-const CarController = require("../app/controller/car.controller");
-const CarValidator = require("../app/validator/car.validator");
+const MaterialController = require("../app/controller/material.controller");
+const MaterialValidator = require("../app/validator/material.validator");
 const upload = require('../middleware/upload.middleware');
 const AuthMiddleware = require("../middleware/auth.middleware");
 
 /**
  * @openapi
- * /car:
+ * /material:
  *  get:
  *     tags:
- *     - Car
+ *     - Material
  *     security:
  *       - bearerAuth: []
- *     summary: Get all car
+ *     summary: Get all material
  *     responses:
  *      200:
  *        description: Success
@@ -24,15 +24,15 @@ const AuthMiddleware = require("../middleware/auth.middleware");
  *      500:
  *        description: Server Error
  */
-router.get("/car", AuthMiddleware, CarController.index);
+router.get("/material", AuthMiddleware, MaterialController.index);
 
 /**
  * @openapi
- * /car:
+ * /material:
  *  post:
  *     tags:
- *     - Car
- *     summary: Add Car
+ *     - Material
+ *     summary: Add Material
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -64,21 +64,21 @@ router.get("/car", AuthMiddleware, CarController.index);
  *      500:
  *        description: Server Error
  */
-router.post("/car", upload.carUpload.single('picture'), CarValidator.store, AuthMiddleware, CarController.store);
+router.post("/material", upload.materialUpload.single('picture'), MaterialValidator.store, AuthMiddleware, MaterialController.store);
 
 /**
  * @openapi
- * /car/{id}:
+ * /material/{id}:
  *  get:
  *     tags:
- *     - Car
- *     summary: Get car
+ *     - Material
+ *     summary: Get material
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car
+ *       description: The unique id of the material
  *       required: true
  *     responses:
  *      200:
@@ -88,21 +88,21 @@ router.post("/car", upload.carUpload.single('picture'), CarValidator.store, Auth
  *      500:
  *        description: Server Error
  */
-router.get("/car/:id", AuthMiddleware, CarController.show);
+router.get("/material/:id", AuthMiddleware, MaterialController.show);
 
 /**
  * @openapi
- * /car/{id}:
+ * /material/{id}:
  *  put:
  *     tags:
- *     - Car
- *     summary: Update Car
+ *     - Material
+ *     summary: Update Material
  *     security:
  *	     - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car
+ *       description: The unique id of the material
  *       required: true
  *     requestBody:
  *      required: true
@@ -132,21 +132,21 @@ router.get("/car/:id", AuthMiddleware, CarController.show);
  *      500:
  *        description: Server Error
  */
-router.put("/car/:id", upload.carUpload.single('picture'), CarValidator.update, AuthMiddleware, CarController.update);
+router.put("/material/:id", upload.materialUpload.single('picture'), MaterialValidator.update, AuthMiddleware, MaterialController.update);
 
 /**
  * @openapi
- * /car/{id}:
+ * /material/{id}:
  *  delete:
  *     tags:
- *     - Car
- *     summary: Delete car
+ *     - Material
+ *     summary: Delete material
  *     security:
  *	     - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car
+ *       description: The unique id of the material
  *       required: true
  *     responses:
  *      200:
@@ -156,7 +156,7 @@ router.put("/car/:id", upload.carUpload.single('picture'), CarValidator.update, 
  *      500:
  *        description: Server Error
  */
-router.delete("/car/:id", AuthMiddleware, CarController.destroy);
+router.delete("/material/:id", AuthMiddleware, MaterialController.destroy);
 
 
 module.exports = router;

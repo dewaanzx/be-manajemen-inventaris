@@ -1,26 +1,26 @@
-const Car = require("../model/cars.model");
-const CarTransaction = require("../model/car_transactions.model");
-const Driver = require("../model/drivers.model");
-const User = require("../model/user.model");
-const Notification = require("../model/notifications.model");
+const Material = require("../model/materials.model.js");
+const MaterialTransaction = require("../model/material_transactions.model.js");
+const Driver = require("../model/drivers.model.js");
+const User = require("../model/user.model.js");
+const Notification = require("../model/notifications.model.js");
 const transporter = require("../../config/mailer.js");
 
 const index = async (req, res) => {
   try {
     //Retreiving user role
     const user_role = req.user.role;
-    let car_transactions = [];
+    let material_transactions = [];
 
     //The data will shown based on role
     if (user_role == "User"){
       const user_id = req.user.id;
-      car_transactions = await CarTransaction.query().where('user_id', user_id).orderBy('id', 'desc');
+      material_transactions = await MaterialTransaction.query().where('user_id', user_id).orderBy('id', 'desc');
     }else{
-      car_transactions = await CarTransaction.query().orderBy('id', 'desc');
+      material_transactions = await MaterialTransaction.query().orderBy('id', 'desc');
     }
 
     //Spliting datetime
-    for (const item of car_transactions){
+    for (const item of material_transactions){
       const datetime_start = new Date(item.datetime_start.getTime() + (7*60) * 60000).toISOString()
       let date_start = datetime_start.split('T')[0];
       let time_start = datetime_start.split('T')[1];
@@ -33,7 +33,7 @@ const index = async (req, res) => {
     res.status(200).json({
       status: 200,
       message: "OK!",
-      data: car_transactions,
+      data: material_transactions,
     });
   } catch (error) {
     console.error(error);
@@ -47,7 +47,7 @@ const showByStatus = async (req, res) => {
   try {
     //Retreiving user role
     const user_role = req.user.role;
-    let car_transactions = [];
+    let material_transactions = [];
 
     //Retreiving status on parameters
     const status = req.params.status;
@@ -57,20 +57,20 @@ const showByStatus = async (req, res) => {
       const user_id = req.user.id;
 
       if (status == "Semua"){
-        car_transactions = await CarTransaction.query().where('user_id', user_id).orderBy('id', 'desc');
+        material_transactions = await MaterialTransaction.query().where('user_id', user_id).orderBy('id', 'desc');
       }else{
-        car_transactions = await CarTransaction.query().where('user_id', user_id).where('status', status).orderBy('id', 'desc');
+        material_transactions = await MaterialTransaction.query().where('user_id', user_id).where('status', status).orderBy('id', 'desc');
       }
     }else{
       if (status == "Semua"){
-        car_transactions = await CarTransaction.query().orderBy('id', 'desc');
+        material_transactions = await MaterialTransaction.query().orderBy('id', 'desc');
       }else{
-        car_transactions = await CarTransaction.query().where('status', status).orderBy('id', 'desc');
+        material_transactions = await MaterialTransaction.query().where('status', status).orderBy('id', 'desc');
       }
     }
 
     //Spliting datetime
-    for (const item of car_transactions){
+    for (const item of material_transactions){
       const datetime_start = new Date(item.datetime_start.getTime() + (7*60) * 60000).toISOString()
       let date_start = datetime_start.split('T')[0];
       let time_start = datetime_start.split('T')[1];
@@ -83,7 +83,7 @@ const showByStatus = async (req, res) => {
     res.status(200).json({
       status: 200,
       message: "OK!",
-      data: car_transactions,
+      data: material_transactions,
     });
   } catch (error) {
     console.error(error);
@@ -98,8 +98,8 @@ const store = async (req, res) => {
     //Merging value of date and time
   	const datetime = req.body.date+" "+req.body.time;
 
-    //Storing data to Car Transaction
-    const car_transaction = await CarTransaction.query().insert({
+    //Storing data to Material Transaction
+    const material_transaction = await MaterialTransaction.query().insert({
       user_id: req.user.id,
       datetime_start: datetime,
       destination: req.body.destination,
@@ -108,7 +108,7 @@ const store = async (req, res) => {
       passanger_description: req.body.passanger_description,
       driver: req.body.driver,
       driver_id: req.body.driver_id,
-      car_id: req.body.car_id,
+      material_id: req.body.material_id,
       status: req.body.status,
       confirmation_note: req.body.confirmation_note,
     });
@@ -122,10 +122,10 @@ const store = async (req, res) => {
         });
     }
 
-    //Changing car availability if admin give the user car
-    if (req.body.car_id){
-      const car = await Car.query()
-        .findById(req.body.car_id)
+    //Changing material availability if admin give the user material
+    if (req.body.material_id){
+      const material = await Material.query()
+        .findById(req.body.material_id)
         .patch({
           availability: "0",
         });
@@ -134,26 +134,26 @@ const store = async (req, res) => {
     //Storing notification
     if (req.body.status == "Diterima"){
       const notification = await Notification.query().insert({
-        user_id: car_transaction.user_id,
-        transaction_id: car_transaction.id,
+        user_id: material_transaction.user_id,
+        transaction_id: material_transaction.id,
         notification: "Permintaan Pengambilan Material "+req.body.destination+" telah diterima!",
-        type: "car",
+        type: "material",
         status: "unread",
       });
     }else{
       const notification = await Notification.query().insert({
-        user_id: car_transaction.user_id,
-        transaction_id: car_transaction.id,
+        user_id: material_transaction.user_id,
+        transaction_id: material_transaction.id,
         notification: "Permintaan Pengambilan Material "+req.body.destination+" telah dibuat!",
-        type: "car",
+        type: "material",
         status: "unread",
       });
     }
 
     res.status(200).json({
       status: 200,
-      message: "Pengajuan peminjaman mobil berhasil!",
-      data: car_transaction,
+      message: "Pengajuan peminjaman material berhasil!",
+      data: material_transaction,
     });
   } catch (error) {
     console.error(error);
@@ -165,43 +165,43 @@ const store = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const car_transaction = await CarTransaction.query().findById(req.params.id);
+    const material_transaction = await MaterialTransaction.query().findById(req.params.id);
 
     //Spliting datetime
-    if(car_transaction.datetime_start){
-      const datetime_start = new Date(car_transaction.datetime_start.getTime() + (7*60) * 60000).toISOString();
+    if(material_transaction.datetime_start){
+      const datetime_start = new Date(material_transaction.datetime_start.getTime() + (7*60) * 60000).toISOString();
       date_start = datetime_start.split('T')[0];
       time_start = datetime_start.split('T')[1];
       time_start = time_start.split('.000Z')[0];
 
-      car_transaction.date_start = date_start;
-      car_transaction.time_start = time_start;
+      material_transaction.date_start = date_start;
+      material_transaction.time_start = time_start;
     }
 
-    if(car_transaction.datetime_taken){
-      const datetime_taken = new Date(car_transaction.datetime_taken.getTime() + (7*60) * 60000).toISOString();
+    if(material_transaction.datetime_taken){
+      const datetime_taken = new Date(material_transaction.datetime_taken.getTime() + (7*60) * 60000).toISOString();
       date_taken = datetime_taken.split('T')[0];
       time_taken = datetime_taken.split('T')[1];
       time_taken = time_taken.split('.000Z')[0];
 
-      car_transaction.date_taken = date_taken;
-      car_transaction.time_taken = time_taken;
+      material_transaction.date_taken = date_taken;
+      material_transaction.time_taken = time_taken;
     }
 
-    if(car_transaction.datetime_return){
-      const datetime_return = new Date(car_transaction.datetime_return.getTime() + (7*60) * 60000).toISOString();
+    if(material_transaction.datetime_return){
+      const datetime_return = new Date(material_transaction.datetime_return.getTime() + (7*60) * 60000).toISOString();
       date_return = datetime_return.split('T')[0];
       time_return = datetime_return.split('T')[1];
       time_return = time_return.split('.000Z')[0];
 
-      car_transaction.date_return = date_return;
-      car_transaction.time_return = time_return;
+      material_transaction.date_return = date_return;
+      material_transaction.time_return = time_return;
     }
 
     res.status(200).json({
       status: 200,
       message: "OK!",
-      data: car_transaction,
+      data: material_transaction,
     });
   } catch (error) {
     console.error(error);
@@ -216,7 +216,7 @@ const userTake = async (req, res) => {
     //Merging value of date and time_taken
     const datetime_taken = req.body.date+" "+req.body.time_taken;
 
-    const car_transaction = await CarTransaction.query()
+    const material_transaction = await MaterialTransaction.query()
       .findById(req.params.id)
       .patch({
         status: "Digunakan",
@@ -225,22 +225,22 @@ const userTake = async (req, res) => {
         driving_license: req.files.driving_license[0].filename,
       });
 
-    const car_transaction_data = await CarTransaction.query().findById(req.params.id);
-    const data_user = await User.query().findById(car_transaction_data.user_id);
+    const material_transaction_data = await MaterialTransaction.query().findById(req.params.id);
+    const data_user = await User.query().findById(material_transaction_data.user_id);
 
     //Create new notification
     const notification = await Notification.query().insert({
       user_id: data_user.id,
-      transaction_id: car_transaction_data.id,
-      notification: "Peminjaman Mobil ke "+req.body.destination+" telah berhasil diambil!",
-      type: "car",
+      transaction_id: material_transaction_data.id,
+      notification: "Peminjaman Material ke "+req.body.destination+" telah berhasil diambil!",
+      type: "material",
       status: "unread",
     });
 
     res.status(200).json({
       status: 200,
-      message: "Mobil telah diambil!",
-      data: car_transaction_data,
+      message: "Material telah diambil!",
+      data: material_transaction_data,
     });
   } catch (error) {
     console.error(error);
@@ -255,7 +255,7 @@ const adminReturn = async (req, res) => {
     //Merging value of date and time_taken
     const datetime_return = req.body.date+" "+req.body.time_return;
 
-    const car_transaction = await CarTransaction.query()
+    const material_transaction = await MaterialTransaction.query()
       .findById(req.params.id)
       .patch({
         datetime_return: datetime_return,
@@ -263,20 +263,20 @@ const adminReturn = async (req, res) => {
         status: "Selesai",
       });
 
-    const car_transaction_data = await CarTransaction.query().findById(req.params.id);
-    const data_user = await User.query().findById(car_transaction_data.user_id);
+    const material_transaction_data = await MaterialTransaction.query().findById(req.params.id);
+    const data_user = await User.query().findById(material_transaction_data.user_id);
 
-    //Updating the Driver and Car availability
-    if (car_transaction_data.driver_id){
+    //Updating the Driver and Material availability
+    if (material_transaction_data.driver_id){
       const driver = await Driver.query()
-        .findById(car_transaction_data.driver_id)
+        .findById(material_transaction_data.driver_id)
         .patch({
           availability: "1",
         });
     }
 
-    const car = await Car.query()
-      .findById(car_transaction_data.car_id)
+    const material = await Material.query()
+      .findById(material_transaction_data.material_id)
       .patch({
         availability: "1",
       });
@@ -284,16 +284,16 @@ const adminReturn = async (req, res) => {
     //Create new notification
     const notification = await Notification.query().insert({
       user_id: data_user.id,
-      transaction_id: car_transaction_data.id,
-      notification: "Peminjaman Mobil ke "+req.body.destination+" telah selesai!",
-      type: "car",
+      transaction_id: material_transaction_data.id,
+      notification: "Peminjaman Material ke "+req.body.destination+" telah selesai!",
+      type: "material",
       status: "unread",
     });
 
     res.status(200).json({
       status: 200,
-      message: "Peminjaman mobil telah selesai!",
-      data: car_transaction_data,
+      message: "Peminjaman material telah selesai!",
+      data: material_transaction_data,
     });
   } catch (error) {
     console.error(error);
@@ -308,7 +308,7 @@ const update = async (req, res) => {
     //Merging value of date and time
     const datetime_start = req.body.date+" "+req.body.time;
 
-    const car_transaction = await CarTransaction.query()
+    const material_transaction = await MaterialTransaction.query()
       .findById(req.params.id)
       .patch({
         datetime_start: datetime_start,
@@ -318,7 +318,7 @@ const update = async (req, res) => {
         passanger_description: req.body.passanger_description,
         driver: req.body.driver,
         driver_id: req.body.driver_id,
-        car_id: req.body.car_id,
+        material_id: req.body.material_id,
         status: req.body.status,
         confirmation_note: req.body.confirmation_note,
       });
@@ -340,25 +340,25 @@ const update = async (req, res) => {
       }
     }
 
-    //Changing car availability based on status
-    if (req.body.car_id){
+    //Changing material availability based on status
+    if (req.body.material_id){
       if (req.body.status == "Selesai" || req.body.status == "Ditolak"){
-        const car = await Car.query()
-          .findById(req.body.car_id)
+        const material = await Material.query()
+          .findById(req.body.material_id)
           .patch({
             availability: "1",
           });
       }else{
-        const car = await Car.query()
-          .findById(req.body.car_id)
+        const material = await Material.query()
+          .findById(req.body.material_id)
           .patch({
             availability: "0",
           });
       }
     }
 
-    const car_transaction_data = await CarTransaction.query().findById(req.params.id);
-    const data_user = await User.query().findById(car_transaction_data.user_id);
+    const material_transaction_data = await MaterialTransaction.query().findById(req.params.id);
+    const data_user = await User.query().findById(material_transaction_data.user_id);
 
     //4 Different message will show based on the choosen status
     if(req.body.status == "Ditolak"){
@@ -366,8 +366,8 @@ const update = async (req, res) => {
       const mail_options = {
         from: 'GMedia',
         to: data_user.email,
-        subject: 'Permintaan peminjaman mobil telah ditolak',
-        html: `Permintaan peminjaman mobil dengan id "${car_transaction_data.id}" telah ditolak.`,
+        subject: 'Permintaan peminjaman material telah ditolak',
+        html: `Permintaan peminjaman material dengan id "${material_transaction_data.id}" telah ditolak.`,
       };
 
       await transporter.sendMail(mail_options);
@@ -375,24 +375,24 @@ const update = async (req, res) => {
       //Create new notification
       const notification = await Notification.query().insert({
         user_id: data_user.id,
-        transaction_id: car_transaction_data.id,
+        transaction_id: material_transaction_data.id,
         notification: "Permintaan Pengambilan Material "+req.body.destination+" telah ditolak!",
-        type: "car",
+        type: "material",
         status: "unread",
       });
 
       res.status(200).json({
         status: 200,
-        message: "Permintaan peminjaman mobil telah ditolak!",
-        data: car_transaction_data,
+        message: "Permintaan peminjaman material telah ditolak!",
+        data: material_transaction_data,
       });
     }else if(req.body.status == "Diterima"){
       //Sending notification to email
       const mail_options = {
         from: 'GMedia',
         to: data_user.email,
-        subject: 'Permintaan peminjaman mobil telah diterima',
-        html: `Permintaan peminjaman mobil dengan id "${car_transaction_data.id}" telah diterima.`,
+        subject: 'Permintaan peminjaman material telah diterima',
+        html: `Permintaan peminjaman material dengan id "${material_transaction_data.id}" telah diterima.`,
       };
 
       await transporter.sendMail(mail_options);
@@ -400,52 +400,52 @@ const update = async (req, res) => {
       //Create new notification
       const notification = await Notification.query().insert({
         user_id: data_user.id,
-        transaction_id: car_transaction_data.id,
+        transaction_id: material_transaction_data.id,
         notification: "Permintaan Pengambilan Material "+req.body.destination+" telah diterima!",
-        type: "car",
+        type: "material",
         status: "unread",
       });
 
       res.status(200).json({
         status: 200,
-        message: "Permintaan peminjaman mobil telah diterima!",
-        data: car_transaction_data,
+        message: "Permintaan peminjaman material telah diterima!",
+        data: material_transaction_data,
       });
     }else if(req.body.status == "Digunakan"){
       //Create new notification
       const notification = await Notification.query().insert({
         user_id: data_user.id,
-        transaction_id: car_transaction_data.id,
-        notification: "Peminjaman Mobil ke "+req.body.destination+" telah berhasil diambil!",
-        type: "car",
+        transaction_id: material_transaction_data.id,
+        notification: "Peminjaman Material ke "+req.body.destination+" telah berhasil diambil!",
+        type: "material",
         status: "unread",
       });
 
       res.status(200).json({
         status: 200,
-        message: "Mobil telah diambil!",
-        data: car_transaction_data,
+        message: "Material telah diambil!",
+        data: material_transaction_data,
       });
     }else if(req.body.status == "Selesai"){
       //Create new notification
       const notification = await Notification.query().insert({
         user_id: data_user.id,
-        transaction_id: car_transaction_data.id,
-        notification: "Peminjaman Mobil ke "+req.body.destination+" telah selesai!",
-        type: "car",
+        transaction_id: material_transaction_data.id,
+        notification: "Peminjaman Material ke "+req.body.destination+" telah selesai!",
+        type: "material",
         status: "unread",
       });
 
       res.status(200).json({
         status: 200,
-        message: "Peminjaman mobil telah selesai!",
-        data: car_transaction_data,
+        message: "Peminjaman material telah selesai!",
+        data: material_transaction_data,
       });
     }else if(req.body.status == "Dicek"){
       res.status(200).json({
         status: 200,
-        message: "Peminjaman mobil telah di update!",
-        data: car_transaction_data,
+        message: "Peminjaman material telah di update!",
+        data: material_transaction_data,
       });
     }
   } catch (error) {
@@ -458,12 +458,12 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-    const car_transaction = await CarTransaction.query().deleteById(req.params.id);
+    const material_transaction = await MaterialTransaction.query().deleteById(req.params.id);
 
     res.status(200).json({
       status: 200,
-      message: "Peminjaman mobil telah dihapus!",
-      data: car_transaction,
+      message: "Peminjaman material telah dihapus!",
+      data: material_transaction,
     });
   } catch (error) {
     console.error(error);
