@@ -4,9 +4,9 @@ const { Model } = require("objection");
 
 Model.knex(db);
 
-class CarTransactions extends Model {
+class MaterialTransactions extends Model {
   static get tableName() {
-    return "car_transactions";
+    return "material_transactions";
   }
 
   static get jsonSchema() {
@@ -37,7 +37,7 @@ class CarTransactions extends Model {
         datetime_start: {
           type: "string",
         },
-        car_id: {
+        material_id: {
           type: "integer",
         },
         confirmation_note: {
@@ -66,4 +66,4 @@ class CarTransactions extends Model {
   }
 }
 
-module.exports = CarTransactions;
+module.exports = MaterialTransactions;

@@ -2,20 +2,20 @@ const express = require("express");
 
 const router = express.Router();
 
-const CarTransactionController = require("../app/controller/car_transaction.controller");
-const CarTransactionValidator = require("../app/validator/car_transaction.validator");
+const MaterialTransactionController = require("../app/controller/material_transaction.controller");
+const MaterialTransactionValidator = require("../app/validator/material_transaction.validator");
 const upload = require('../middleware/upload.middleware');
 const AuthMiddleware = require("../middleware/auth.middleware");
 
 /**
  * @openapi
- * /car-transaction:
+ * /material-transaction:
  *  get:
  *     tags:
- *     - Car Transaction
+ *     - Material Transaction
  *     security:
  *       - bearerAuth: []
- *     summary: Get all car transaction
+ *     summary: Get all material transaction
  *     responses:
  *      200:
  *        description: Success
@@ -24,21 +24,21 @@ const AuthMiddleware = require("../middleware/auth.middleware");
  *      500:
  *        description: Server Error
  */
-router.get("/car-transaction", AuthMiddleware, CarTransactionController.index);
+router.get("/material-transaction", AuthMiddleware, MaterialTransactionController.index);
 
 /**
  * @openapi
- * /car-transaction/status/{status}:
+ * /material-transaction/status/{status}:
  *  get:
  *     tags:
- *     - Car Transaction
+ *     - Material Transaction
  *     security:
  *       - bearerAuth: []
- *     summary: Detail car transaction based on status
+ *     summary: Detail material transaction based on status
  *     parameters:
  *     - name: status
  *       in: path
- *       description: Status of the car transaction
+ *       description: Status of the material transaction
  *       required: true
  *     responses:
  *      200:
@@ -48,17 +48,17 @@ router.get("/car-transaction", AuthMiddleware, CarTransactionController.index);
  *      500:
  *        description: Server Error
  */
-router.get("/car-transaction/status/:status", AuthMiddleware, CarTransactionController.showByStatus);
+router.get("/material-transaction/status/:status", AuthMiddleware, MaterialTransactionController.showByStatus);
 
 /**
  * @openapi
- * /car-transaction:
+ * /material-transaction:
  *  post:
  *     tags:
- *     - Car Transaction
+ *     - Material Transaction
  *     security:
  *       - bearerAuth: []
- *     summary: Book a car
+ *     summary: Book a material
  *     requestBody:
  *      required: true
  *      content:
@@ -99,7 +99,7 @@ router.get("/car-transaction/status/:status", AuthMiddleware, CarTransactionCont
  *              driver_id:
  *               type: string
  *               example: 1
- *              car_id:
+ *              material_id:
  *               type: integer
  *               example: 1
  *              status:
@@ -118,21 +118,21 @@ router.get("/car-transaction/status/:status", AuthMiddleware, CarTransactionCont
  *      500:
  *        description: Server Error
  */
-router.post("/car-transaction", AuthMiddleware, CarTransactionValidator.store, CarTransactionController.store);
+router.post("/material-transaction", AuthMiddleware, MaterialTransactionValidator.store, MaterialTransactionController.store);
 
 /**
  * @openapi
- * /car-transaction/{id}:
+ * /material-transaction/{id}:
  *  get:
  *     tags:
- *     - Car Transaction
+ *     - Material Transaction
  *     security:
  *       - bearerAuth: []
- *     summary: Detail car transaction
+ *     summary: Detail material transaction
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car transaction
+ *       description: The unique id of the material transaction
  *       required: true
  *     responses:
  *      200:
@@ -142,21 +142,21 @@ router.post("/car-transaction", AuthMiddleware, CarTransactionValidator.store, C
  *      500:
  *        description: Server Error
  */
-router.get("/car-transaction/:id", AuthMiddleware, CarTransactionController.show);
+router.get("/material-transaction/:id", AuthMiddleware, MaterialTransactionController.show);
 
 /**
  * @openapi
- * /car-transaction/admin/{id}:
+ * /material-transaction/admin/{id}:
  *  put:
  *     tags:
- *     - Car Transaction
- *     summary: Update the booked car, include the confirmation (Admin)
+ *     - Material Transaction
+ *     summary: Update the booked material, include the confirmation (Admin)
  *     security:
  *	     - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car transaction
+ *       description: The unique id of the material transaction
  *       required: true
  *     requestBody:
  *      required: true
@@ -200,7 +200,7 @@ router.get("/car-transaction/:id", AuthMiddleware, CarTransactionController.show
  *              driver_id:
  *               type: string
  *               example: 1
- *              car_id:
+ *              material_id:
  *               type: integer
  *               example: 1
  *              status:
@@ -219,21 +219,21 @@ router.get("/car-transaction/:id", AuthMiddleware, CarTransactionController.show
  *      500:
  *        description: Server Error
  */
-router.put("/car-transaction/admin/:id", CarTransactionValidator.adminUpdate, AuthMiddleware, CarTransactionController.update);
+router.put("/material-transaction/admin/:id", MaterialTransactionValidator.adminUpdate, AuthMiddleware, MaterialTransactionController.update);
 
 /**
  * @openapi
- * /car-transaction/take/{id}:
+ * /material-transaction/take/{id}:
  *  put:
  *     tags:
- *     - Car Transaction
- *     summary: Taking the booked car (User)
+ *     - Material Transaction
+ *     summary: Taking the booked material (User)
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car transaction
+ *       description: The unique id of the material transaction
  *       required: true
  *     requestBody:
  *      required: true
@@ -269,21 +269,21 @@ router.put("/car-transaction/admin/:id", CarTransactionValidator.adminUpdate, Au
  *      500:
  *        description: Server Error
  */
-router.put("/car-transaction/take/:id", upload.carTransactionUpload.fields([{ name: 'picture', maxCount: 1}, { name: 'driving_license', maxCount: 1}, ]), CarTransactionValidator.userTake, AuthMiddleware, CarTransactionController.userTake);
+router.put("/material-transaction/take/:id", upload.materialTransactionUpload.fields([{ name: 'picture', maxCount: 1}, { name: 'driving_license', maxCount: 1}, ]), MaterialTransactionValidator.userTake, AuthMiddleware, MaterialTransactionController.userTake);
 
 /**
  * @openapi
- * /car-transaction/return/{id}:
+ * /material-transaction/return/{id}:
  *  put:
  *     tags:
- *     - Car Transaction
- *     summary: Returning the booked car (Admin)
+ *     - Material Transaction
+ *     summary: Returning the booked material (Admin)
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car transaction
+ *       description: The unique id of the material transaction
  *       required: true
  *     requestBody:
  *      required: true
@@ -317,21 +317,21 @@ router.put("/car-transaction/take/:id", upload.carTransactionUpload.fields([{ na
  *      500:
  *        description: Server Error
  */
-router.put("/car-transaction/return/:id", CarTransactionValidator.adminReturn, AuthMiddleware, CarTransactionController.adminReturn);
+router.put("/material-transaction/return/:id", MaterialTransactionValidator.adminReturn, AuthMiddleware, MaterialTransactionController.adminReturn);
 
 /**
  * @openapi
- * /car-transaction/{id}:
+ * /material-transaction/{id}:
  *  delete:
  *     tags:
- *     - Car Transaction
- *     summary: Delete car transaction
+ *     - Material Transaction
+ *     summary: Delete material transaction
  *     security:
  *	     - bearerAuth: []
  *     parameters:
  *     - name: id
  *       in: path
- *       description: The unique id of the car transaction
+ *       description: The unique id of the material transaction
  *       required: true
  *     responses:
  *      200:
@@ -341,7 +341,7 @@ router.put("/car-transaction/return/:id", CarTransactionValidator.adminReturn, A
  *      500:
  *        description: Server Error
  */
-router.delete("/car-transaction/:id", AuthMiddleware, CarTransactionController.destroy);
+router.delete("/material-transaction/:id", AuthMiddleware, MaterialTransactionController.destroy);
 
 
 module.exports = router;
