@@ -1,4 +1,4 @@
-# Backend Maspos
+# Backend Manajemen Inventaris
 
 ## Official Documentation
 
