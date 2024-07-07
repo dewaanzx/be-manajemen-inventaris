@@ -110,12 +110,23 @@ const register = async (req, res) => {
     });
 
     const verification_link = `http://localhost:8080/verify-email?token=${verification_token}`;
-    const mail_options = {
-      from: "GMedia",
-      to: req.body.email,
-      subject: "Verify Your Email Address",
-      html: `Click <a href="${verification_link}">here</a> to verify your email address.`,
-    };
+const mail_options = {
+  from: "Telkom Magelang",
+  to: req.body.email,
+  subject: "Verify Your Email Address",
+  html: `
+    <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
+      <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #4CAF50;">Welcome to Telkom Magelang!</h2>
+        <p style="font-size: 16px;">We're excited to have you get started. First, you need to confirm your account. Just press the button below.</p>
+        <a href="${verification_link}" style="display: inline-block; padding: 12px 20px; margin: 20px 0; font-size: 16px; color: white; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Verify Email</a>
+        <p style="font-size: 14px; color: #777;">If you did not create an account, no further action is required.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="font-size: 14px; color: #777;">Need help? Contact our <a href="mailto:spectratidar@gmail.com" style="color: #4CAF50; text-decoration: none;">support team</a>.</p>
+      </div>
+    </div>
+  `,
+};
 
     await transporter.sendMail(mail_options);
 

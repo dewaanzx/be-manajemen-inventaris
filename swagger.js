@@ -7,9 +7,9 @@ exports.swagger = (app) => {
       servers: [{ url: "/" }],
       openapi: "3.0.0",
       info: {
-        title: "TEMPLATE API",
+        title: "Manajemen Inventaris PT. Telkom Witel Magelang",
         description:
-          "support the needs and knowledge of API with a beautiful appearance",
+          "Backend Documentation",
         version: "1.0.0",
       },
       components: {

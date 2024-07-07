@@ -25,7 +25,7 @@ swaggerDocs.swagger(app);
 
 app.get("/", (req, res) => {
   res.render("welcome", {
-    text: "Hello, It's Work!",
+    text: "Akses sistem Backend Manajemen Inventaris PT. Telkom Witel Magelang",
   });
 });
 
