@@ -197,12 +197,22 @@ const forgotPassword = async (req, res) => {
         verification_token: reset_password_token,
       });
 
-    const reset_password_link = `http://localhost:8080/reset-password?token=${reset_password_token}`;
+    const reset_password_link = `http://localhost:5173/newpassword?token=${reset_password_token}`;
     const mail_options = {
       from: "GMedia",
       to: req.body.email,
       subject: "Reset Your Passsword",
-      html: `Click <a href="${reset_password_link}">here</a> to reset your password.`,
+      html: `<div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
+  <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #4CAF50;">Reset Your Password</h2>
+    <p style="font-size: 16px;">You've requested to reset your password. Click the button below to reset it.</p>
+    <a href="${reset_password_link}" style="display: inline-block; padding: 12px 20px; margin: 20px 0; font-size: 16px; color: white; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Reset Password</a>
+    <p style="font-size: 14px; color: #777;">If you didn't request this, you can safely ignore this email.</p>
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+    <p style="font-size: 14px; color: #777;">Need help? Contact our <a href="mailto:spectratidar@gmail.com" style="color: #4CAF50; text-decoration: none;">support team</a>.</p>
+  </div>
+</div>
+`,
     };
 
     await transporter.sendMail(mail_options);
