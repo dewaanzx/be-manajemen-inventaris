@@ -37,7 +37,7 @@ const index = async (req, res) => {
 const store = async (req, res) => {
   try {
     const division = await Division.query().insert({
-      name: req.body.name,
+      name: req.body.name.toLowerCase(),
     });
 
     res.status(200).json({
@@ -75,7 +75,7 @@ const update = async (req, res) => {
     const division = await Division.query()
       .findById(req.params.id)
       .patch({
-        name: req.body.name,
+        name: req.body.name.toLowerCase(),
       });
 
     res.status(200).json({
@@ -107,7 +107,6 @@ const destroy = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   nonSelected,

@@ -47,7 +47,7 @@ router.get("/division/non-selected/:name", AuthMiddleware, DivisionController.no
  *      500:
  *        description: Server Error
  */
-router.get("/division", AuthMiddleware, DivisionController.index);
+router.get("/division", DivisionController.index);
 
 /**
  * @openapi
