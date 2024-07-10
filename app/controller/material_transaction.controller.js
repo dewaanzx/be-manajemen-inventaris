@@ -364,7 +364,7 @@ const update = async (req, res) => {
     if(req.body.status == "Ditolak"){
       //Sending notification to email
       const mail_options = {
-        from: 'GMedia',
+        from: 'Telkom Magelang',
         to: data_user.email,
         subject: 'Permintaan peminjaman material telah ditolak',
         html: `Permintaan peminjaman material dengan id "${material_transaction_data.id}" telah ditolak.`,
@@ -389,7 +389,7 @@ const update = async (req, res) => {
     }else if(req.body.status == "Diterima"){
       //Sending notification to email
       const mail_options = {
-        from: 'GMedia',
+        from: 'Telkom Magelang',
         to: data_user.email,
         subject: 'Permintaan peminjaman material telah diterima',
         html: `Permintaan peminjaman material dengan id "${material_transaction_data.id}" telah diterima.`,

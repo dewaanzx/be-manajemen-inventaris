@@ -88,15 +88,6 @@ const register = async (req, res) => {
       });
     }
 
-    /*
-    if (!/gmedia\.id$/.test(req.body.email)){
-      return res.status(400).json({
-        status: 400,
-        message: "Email harus memiliki domain @gmedia.id!",
-      });
-    }
-    */
-
     const verification_token = crypto.randomBytes(20).toString('hex');
 
     const user = await User.query().insert({
@@ -199,7 +190,7 @@ const forgotPassword = async (req, res) => {
 
     const reset_password_link = `http://localhost:5173/newpassword?token=${reset_password_token}`;
     const mail_options = {
-      from: "GMedia",
+      from: "Telkom Magelang",
       to: req.body.email,
       subject: "Reset Your Passsword",
       html: `<div style="font-family: Arial, sans-serif; text-align: center; color: #333;">

@@ -24,7 +24,7 @@ const AuthValidator = require("../app/validator/auth.validator");
  *            properties:
  *              email:
  *               type: string
- *               example: admin@gmedia.id
+ *               example: dewabandis11@gmail.com
  *              password:
  *               type: string
  *               example: password
@@ -67,7 +67,7 @@ router.post("/login", AuthValidator.login, AuthController.login);
  *               example: Fitrah Firdaus
  *              email:
  *               type: string
- *               example: admin@gmedia.id
+ *               example: dewabandis11@gmail.com
  *              password:
  *               type: string
  *               example: password
@@ -126,7 +126,7 @@ router.get("/verify-email", AuthController.verifyEmail);
  *            properties:
  *              email:
  *               type: string
- *               example: admin@gmedia.id
+ *               example: dewabandis11@gmail.com
  *     responses:
  *      200:
  *        description: Success

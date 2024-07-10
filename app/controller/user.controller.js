@@ -38,13 +38,6 @@ const store = async (req, res) => {
         message: "Phone Number not available!",
       });
     }
-
-    if (!/gmedia\.id$/.test(req.body.email)){
-      return res.status(400).json({
-        status: 400,
-        message: "Email harus memiliki domain @gmedia.id!",
-      });
-    }
     
     const verification_token = crypto.randomBytes(20).toString('hex');
 
@@ -69,7 +62,7 @@ const store = async (req, res) => {
 
     const verification_link = `http://localhost:8080/verify-email?token=${verification_token}`;
     const mail_options = {
-      from: "GMedia",
+      from: "Telkom Magelang",
       to: req.body.email,
       subject: "Verify Your Email Address",
       html: `Click <a href="${verification_link}">here</a> to verify your email address.`,
@@ -131,13 +124,6 @@ const update = async (req, res) => {
         });
       }
     }else{
-      if (!/gmedia\.id$/.test(req.body.email)){
-        return res.status(400).json({
-          status: 400,
-          message: "Email harus memiliki domain @gmedia.id!",
-        });
-      }
-
       const user = await User.query()
         .findById(req.params.id)
         .patch({
@@ -145,7 +131,7 @@ const update = async (req, res) => {
           email: req.body.email,
           phone: (req.body.phone).toString(),
           role: req.body.role,
-          division: req.body.division,
+          division: req.body.division.toLowerCase(),
         });
 
       if(req.file){
