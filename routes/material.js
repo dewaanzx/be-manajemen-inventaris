@@ -158,5 +158,4 @@ router.put("/material/:id", upload.materialUpload.single('picture'), MaterialVal
  */
 router.delete("/material/:id", AuthMiddleware, MaterialController.destroy);
 
-
 module.exports = router;

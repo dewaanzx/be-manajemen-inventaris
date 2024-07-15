@@ -13,7 +13,7 @@ class MaterialTransactions extends Model {
     return {
       type: "object",
 
-      required: ["user_id", "destination", "description", "passanger", "passanger_description", "driver", "datetime_start"],
+      required: ["user_id", "destination", "description", "datetime"],
 
       properties: {
         user_id: {
@@ -25,38 +25,11 @@ class MaterialTransactions extends Model {
         description: {
           type: "string",
         },
-        passanger: {
-          type: "integer",
-        },
-        passanger_description: {
-          type: "string",
-        },
-        driver: {
-          type: "string",
-        },
-        datetime_start: {
+        datetime: {
           type: "string",
         },
         material_id: {
           type: "integer",
-        },
-        confirmation_note: {
-          type: "string",
-        },
-        driving_license: {
-          type: "string",
-        },
-        picture: {
-          type: "string",
-        },
-        datetime_taken: {
-          type: "string",
-        },
-        datetime_return: {
-          type: "string",
-        },
-        return_note: {
-          type: "string",
         },
         status: {
           type: "string",

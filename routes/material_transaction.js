@@ -70,9 +70,6 @@ router.get("/material-transaction/status/:status", AuthMiddleware, MaterialTrans
  *              - time
  *              - destination
  *              - description
- *              - passanger
- *              - passanger_description
- *              - driver
  *            properties:
  *              date:
  *               type: string
@@ -87,27 +84,12 @@ router.get("/material-transaction/status/:status", AuthMiddleware, MaterialTrans
  *              description:
  *               type: string
  *               example: Solo
- *              passanger:
- *               type: integer
- *               example: 5
- *              passanger_description:
- *               type: string
- *               example: Lorem Ipsum
- *              driver:
- *               type: string
- *               example: 1
- *              driver_id:
- *               type: string
- *               example: 1
  *              material_id:
  *               type: integer
  *               example: 1
  *              status:
  *               type: string
- *               example: Dicek
- *              confirmation_note:
- *               type: string
- *               example: Lorem Ipsum
+ *               example: Belum
  *     responses:
  *      200:
  *        description: Success
@@ -169,9 +151,6 @@ router.get("/material-transaction/:id", AuthMiddleware, MaterialTransactionContr
  *              - time
  *              - destination
  *              - description
- *              - passanger
- *              - passanger_description
- *              - driver
  *              - status
  *            properties:
  *              date:
@@ -188,27 +167,12 @@ router.get("/material-transaction/:id", AuthMiddleware, MaterialTransactionContr
  *              description:
  *               type: string
  *               example: Solo
- *              passanger:
- *               type: integer
- *               example: 5
- *              passanger_description:
- *               type: string
- *               example: Lorem Ipsum
- *              driver:
- *               type: string
- *               example: 1
- *              driver_id:
- *               type: string
- *               example: 1
  *              material_id:
  *               type: integer
  *               example: 1
  *              status:
  *               type: string
- *               enum: ["Dicek", "Ditolak", "Diterima", "Digunakan", "Selesai"]
- *              confirmation_note:
- *               type: string
- *               example: Lorem Ipsum
+ *               enum: ["Dikonfirmasi", "Belum"]
  *     responses:
  *      200:
  *        description: Success
@@ -235,30 +199,6 @@ router.put("/material-transaction/admin/:id", MaterialTransactionValidator.admin
  *       in: path
  *       description: The unique id of the material transaction
  *       required: true
- *     requestBody:
- *      required: true
- *      content:
- *         multipart/form-data:
- *           schema:
- *            type: object
- *            required:
- *              - date
- *              - time_taken
- *              - picture
- *              - driving_license
- *            properties:
- *              date:
- *               type: string
- *               format: date
- *               example: 2023-11-13
- *              time_taken:
- *               type: string
- *               format: time
- *               example: 08:00:00
- *              picture:
- *               type: file
- *              driving_license:
- *               type: file
  *     responses:
  *      200:
  *        description: Success
@@ -269,55 +209,7 @@ router.put("/material-transaction/admin/:id", MaterialTransactionValidator.admin
  *      500:
  *        description: Server Error
  */
-router.put("/material-transaction/take/:id", upload.materialTransactionUpload.fields([{ name: 'picture', maxCount: 1}, { name: 'driving_license', maxCount: 1}, ]), MaterialTransactionValidator.userTake, AuthMiddleware, MaterialTransactionController.userTake);
-
-/**
- * @openapi
- * /material-transaction/return/{id}:
- *  put:
- *     tags:
- *     - Material Transaction
- *     summary: Returning the booked material (Admin)
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *     - name: id
- *       in: path
- *       description: The unique id of the material transaction
- *       required: true
- *     requestBody:
- *      required: true
- *      content:
- *         application/json:
- *           schema:
- *            type: object
- *            required:
- *              - date
- *              - time_return
- *              - return_note
- *            properties:
- *              date:
- *               type: string
- *               format: date
- *               example: 2023-11-13
- *              time_return:
- *               type: string
- *               format: time
- *               example: 08:00:00
- *              return_note:
- *               type: string
- *               example: Lorem Ipsum
- *     responses:
- *      200:
- *        description: Success
- *      400:
- *        description: Bad Request
- *      422:
- *        description: Unprocessable Entity
- *      500:
- *        description: Server Error
- */
-router.put("/material-transaction/return/:id", MaterialTransactionValidator.adminReturn, AuthMiddleware, MaterialTransactionController.adminReturn);
+router.put("/material-transaction/take/:id", upload.materialTransactionUpload.fields([{ name: 'picture', maxCount: 1}, { name: 'driving_license', maxCount: 1}, ]), AuthMiddleware, MaterialTransactionController.userTake);
 
 /**
  * @openapi

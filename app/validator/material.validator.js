@@ -2,7 +2,7 @@ const { check, validationResult } = require("express-validator");
 
 const store = [
   check("name").not().isEmpty().withMessage("Nama tidak boleh kosong!"),
-  check("license").not().isEmpty().withMessage("Nomor polisi tidak boleh kosong!"),
+  check("size").not().isEmpty().withMessage("Ukuran tidak boleh kosong!"),
 
   (req, res, next) => {
     const errors = validationResult(req);
@@ -25,7 +25,7 @@ const store = [
 
 const update = [
   check("name").not().isEmpty().withMessage("Nama tidak boleh kosong!"),
-  check("license").not().isEmpty().withMessage("Nomor polisi tidak boleh kosong!"),
+  check("size").not().isEmpty().withMessage("Ukuran tidak boleh kosong!"),
 
   (req, res, next) => {
     const errors = validationResult(req);

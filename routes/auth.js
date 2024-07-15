@@ -27,7 +27,7 @@ const AuthValidator = require("../app/validator/auth.validator");
  *               example: dewabandis11@gmail.com
  *              password:
  *               type: string
- *               example: password
+ *               example: tes
  *     responses:
  *      200:
  *        description: Success

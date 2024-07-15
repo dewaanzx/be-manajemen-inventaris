@@ -13,19 +13,19 @@ class Materials extends Model {
     return {
       type: "object",
 
-      required: ["name", "license", "picture"],
+      required: ["name", "size", "quantity", "picture"],
 
       properties: {
         name: {
           type: "string",
         },
-        license: {
+        size: {
           type: "string",
+        },
+        quantity: {
+          type: "integer",
         },
         picture: {
-          type: "string",
-        },
-        availability: {
           type: "string",
         },
       },
