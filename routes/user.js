@@ -82,7 +82,7 @@ router.get("/user", AuthMiddleware, UserController.index);
  *               example: 0895411423735
  *              role:
  *               type: string
- *               enum: ["User", "Admin", "SPV Rooms", "SPV Cars"]
+ *               enum: ["User", "Admin"]
  *              division:
  *               type: string
  *               example: Internship
@@ -162,7 +162,7 @@ router.get("/user/:id", AuthMiddleware, UserController.show);
  *               example: 0895411423735
  *              role:
  *               type: string
- *               enum: ["User", "Admin", "SPV Rooms", "SPV Cars"]
+ *               enum: ["User", "Admin"]
  *              division:
  *               type: string
  *               example: Internship

@@ -19,12 +19,16 @@ const nonSelected = async (req, res) => {
 
 const index = async (req, res) => {
   try {
+	const counts = {};
     const divisions = await Division.query();
+
+	counts.countDivision = divisions.length;
 
     res.status(200).json({
       status: 200,
       message: "OK!",
       data: divisions,
+      count: counts,
     });
   } catch (error) {
     console.error(error);

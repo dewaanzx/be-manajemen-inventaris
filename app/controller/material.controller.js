@@ -26,7 +26,7 @@ const store = async (req, res) => {
     const material = await Material.query().insert({
       name: req.body.name,
       size: req.body.size,
-      quantity: req.body.quantity,
+      quantity: parseInt(req.body.quantity),
       picture: req.file.filename,
     });
 

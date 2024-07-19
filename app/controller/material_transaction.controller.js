@@ -96,10 +96,6 @@ const store = async (req, res) => {
       status: req.body.status,
     });
 
-    if (req.body.driver_id) {
-      await Driver.query().findById(req.body.driver_id).patch({ availability: "0" });
-    }
-
     if (req.body.material_id) {
       await decreaseMaterialQuantity(req.body.material_id, 1);
     }

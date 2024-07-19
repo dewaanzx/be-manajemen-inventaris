@@ -6,12 +6,16 @@ const crypto = require('crypto');
 
 const index = async (req, res) => {
   try {
+	const counts = {};
     const users = await User.query();
+	
+	counts.countUsers = users.length;
 
     res.status(200).json({
       status: 200,
       message: "OK!",
       data: users,
+      count: counts,
     });
   } catch (error) {
     console.error(error);
